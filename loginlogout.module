@@ -1,0 +1,28 @@
+<?php
+
+/*
+	implementation of hook_user
+
+*/
+function loginlogout_user($op, &$edit, &$account, $category = NULL) {
+  switch ($op) {
+    case 'logout':
+      if (!$_REQUEST['destination']) break;
+      global $user ;
+      $user_temp = $user;
+      $user = user_load(0);
+      $item = menu_get_item($_REQUEST['destination']);
+      if (!$item['access']) $_REQUEST['destination'] =  '';
+    
+      $user = $user_temp;
+    break;
+  }
+}
+
+function loginlogout_init() {
+  $path = drupal_get_path('module', 'loginlogout');
+  drupal_add_js($path .'/loginlogout.js');
+  drupal_add_js(array('loginlogout' => array(
+    'destination' => drupal_get_destination()))
+    ,'setting');
+}
