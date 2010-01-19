@@ -2,5 +2,5 @@
 
 function loginlogout_install() {
   // make sure it runs before lightbox js 
-  db_query("UPDATE system set weight=-1 where name='loginlogout'");
+  db_query("UPDATE {system} set weight=-1 where name='loginlogout'");
 }

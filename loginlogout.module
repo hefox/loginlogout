@@ -19,6 +19,10 @@ function loginlogout_user($op, &$edit, &$account, $category = NULL) {
   }
 }
 
+/*
+	implementation of hook_init
+
+*/
 function loginlogout_init() { // sps dummie if someone is logged in why checking logged in? dummie, FIXME
   $path = drupal_get_path('module', 'loginlogout');
   drupal_add_js($path .'/loginlogout.js');
