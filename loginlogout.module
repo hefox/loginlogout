@@ -19,10 +19,16 @@ function loginlogout_user($op, &$edit, &$account, $category = NULL) {
   }
 }
 
-function loginlogout_init() {
+function loginlogout_init() { // sps dummie if someone is logged in why checking logged in? dummie, FIXME
   $path = drupal_get_path('module', 'loginlogout');
   drupal_add_js($path .'/loginlogout.js');
   drupal_add_js(array('loginlogout' => array(
-    'destination' => drupal_get_destination()))
+    'destination' => drupal_get_destination(),
+    'login'=> url('user/login'),
+    'logout' => url('logout'),
+    'login_destination'=> url('user/login', array('query'=>drupal_get_destination())),
+    'logout_destination' => url('logout', array('query'=>drupal_get_destination())),
+      ),
+    )
     ,'setting');
 }
