@@ -1,9 +1,9 @@
 <?php
 
 /*
-	implementation of hook_user
-
-*/
+ *	Implementation of hook_user
+ *
+ */
 function loginlogout_user($op, &$edit, &$account, $category = NULL) {
   switch ($op) {
     case 'logout':
@@ -20,19 +20,25 @@ function loginlogout_user($op, &$edit, &$account, $category = NULL) {
 }
 
 /*
-	implementation of hook_init
-
-*/
-function loginlogout_init() { // sps dummie if someone is logged in why checking logged in? dummie, FIXME
+ *	Implementation of hook_init
+ *
+ */
+function loginlogout_init() {
   $path = drupal_get_path('module', 'loginlogout');
   drupal_add_js($path .'/loginlogout.js');
-  drupal_add_js(array('loginlogout' => array(
+  $settings = array('loginlogout' => array(
     'destination' => drupal_get_destination(),
-    'login'=> url('user/login'),
-    'logout' => url('logout'),
-    'login_destination'=> url('user/login', array('query'=>drupal_get_destination())),
-    'logout_destination' => url('logout', array('query'=>drupal_get_destination())),
-      ),
-    )
-    ,'setting');
+  ));
+  $settings['loginlogout']['urls'] = array(
+    url('user/login') => url('user/login', array('query'=>drupal_get_destination())),
+    url('logout') =>  url('logout', array('query'=>drupal_get_destination())),
+  );
+  if (!user_is_logged_in()) { // fixme
+     $settings['loginlogout']['urls'][url('user')] = url('user', array('query'=>drupal_get_destination()));
+  }
+  foreach(variable_get('loginlogout_additional_urls',array()) as $path) {
+     $url = url($path);
+     if ($url) $settings['loginlogout']['urls'][$url] = url($path, array('query'=>drupal_get_destination()));
+  }
+  drupal_add_js($settings ,'setting');
 }
