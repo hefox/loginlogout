@@ -4,3 +4,8 @@ function loginlogout_install() {
   // make sure it runs before lightbox js 
   db_query("UPDATE {system} set weight=-1 where name='loginlogout'");
 }
+
+function loginlogout_uninstall() {
+  // make sure it runs before lightbox js 
+  variable_delete('loginlogout_additional_urls');
+}

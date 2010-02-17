@@ -36,9 +36,26 @@ function loginlogout_init() {
   if (!user_is_logged_in()) { // fixme
      $settings['loginlogout']['urls'][url('user')] = url('user', array('query'=>drupal_get_destination()));
   }
-  foreach(variable_get('loginlogout_additional_urls',array()) as $path) {
-     $url = url($path);
+  $paths = variable_get('loginlogout_additional_urls','');
+  if (!is_array($paths)) $paths = explode("\n",$paths);
+  foreach($paths as $path) {
+     $url = url(trim($path));
      if ($url) $settings['loginlogout']['urls'][$url] = url($path, array('query'=>drupal_get_destination()));
   }
   drupal_add_js($settings ,'setting');
 }
+
+
+function loginlogout_menu() {
+  $items['admin/settings/loginlogout'] = array(
+    'title' => 'Login logout settings',
+    'description' => 'Configure login logout settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('loginlogout_settings'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'loginlogout.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
